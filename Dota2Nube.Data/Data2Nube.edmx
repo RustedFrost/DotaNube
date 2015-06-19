@@ -1,0 +1,844 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Dota2NubeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="CountryId" />
+          </Key>
+          <Property Name="CountryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CountryName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Game">
+          <Key>
+            <PropertyRef Name="GameId" />
+          </Key>
+          <Property Name="GameId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Team1Id" Type="int" Nullable="false" />
+          <Property Name="Team2Id" Type="int" Nullable="false" />
+          <Property Name="TournamentId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GameResult">
+          <Key>
+            <PropertyRef Name="GameResultId" />
+          </Key>
+          <Property Name="GameResultId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GameId" Type="int" Nullable="false" />
+          <Property Name="WinningTeamId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pool">
+          <Key>
+            <PropertyRef Name="PoolId" />
+          </Key>
+          <Property Name="PoolId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PoolName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TournamentId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PoolUsers">
+          <Key>
+            <PropertyRef Name="PoolUsersId" />
+          </Key>
+          <Property Name="PoolUsersId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PoolId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Prediction">
+          <Key>
+            <PropertyRef Name="PredictionId" />
+          </Key>
+          <Property Name="PredictionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="GameId" Type="int" Nullable="false" />
+          <Property Name="TeamId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Team">
+          <Key>
+            <PropertyRef Name="TeamId" />
+          </Key>
+          <Property Name="TeamId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TeamName" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="TeamShortName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tournament">
+          <Key>
+            <PropertyRef Name="TournamentId" />
+          </Key>
+          <Property Name="TournamentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TournamentName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="TournamentStartDate" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="UserEmail" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="SteamId" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Age" Type="int" Nullable="false" />
+          <Property Name="CountryId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserStat">
+          <Key>
+            <PropertyRef Name="UserStatId" />
+          </Key>
+          <Property Name="UserStatId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Score" Type="int" Nullable="false" />
+          <Property Name="TournamentId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Game_Team">
+          <End Role="Team" Type="Self.Team" Multiplicity="1" />
+          <End Role="Game" Type="Self.Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="Game">
+              <PropertyRef Name="Team1Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Game_Team1">
+          <End Role="Team" Type="Self.Team" Multiplicity="1" />
+          <End Role="Game" Type="Self.Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="Game">
+              <PropertyRef Name="Team2Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Game_Tournament">
+          <End Role="Tournament" Type="Self.Tournament" Multiplicity="1" />
+          <End Role="Game" Type="Self.Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tournament">
+              <PropertyRef Name="TournamentId" />
+            </Principal>
+            <Dependent Role="Game">
+              <PropertyRef Name="TournamentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GameResult_Game">
+          <End Role="Game" Type="Self.Game" Multiplicity="1" />
+          <End Role="GameResult" Type="Self.GameResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="GameId" />
+            </Principal>
+            <Dependent Role="GameResult">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GameResult_Team">
+          <End Role="Team" Type="Self.Team" Multiplicity="1" />
+          <End Role="GameResult" Type="Self.GameResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="GameResult">
+              <PropertyRef Name="WinningTeamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pool_Tournament">
+          <End Role="Tournament" Type="Self.Tournament" Multiplicity="1" />
+          <End Role="Pool" Type="Self.Pool" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tournament">
+              <PropertyRef Name="TournamentId" />
+            </Principal>
+            <Dependent Role="Pool">
+              <PropertyRef Name="TournamentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pool_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Pool" Type="Self.Pool" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Pool">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PoolUsers_Pool">
+          <End Role="Pool" Type="Self.Pool" Multiplicity="1" />
+          <End Role="PoolUsers" Type="Self.PoolUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pool">
+              <PropertyRef Name="PoolId" />
+            </Principal>
+            <Dependent Role="PoolUsers">
+              <PropertyRef Name="PoolId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PoolUsers_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="PoolUsers" Type="Self.PoolUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="PoolUsers">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Prediction_Game">
+          <End Role="Game" Type="Self.Game" Multiplicity="1" />
+          <End Role="Prediction" Type="Self.Prediction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="GameId" />
+            </Principal>
+            <Dependent Role="Prediction">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Prediction_Team">
+          <End Role="Team" Type="Self.Team" Multiplicity="1" />
+          <End Role="Prediction" Type="Self.Prediction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="Prediction">
+              <PropertyRef Name="TeamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Prediction_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Prediction" Type="Self.Prediction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Prediction">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Country">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="CountryId" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="CountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserStat_Tournament">
+          <End Role="Tournament" Type="Self.Tournament" Multiplicity="1" />
+          <End Role="UserStat" Type="Self.UserStat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tournament">
+              <PropertyRef Name="TournamentId" />
+            </Principal>
+            <Dependent Role="UserStat">
+              <PropertyRef Name="TournamentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserStat_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UserStat" Type="Self.UserStat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserStat">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Dota2NubeModelStoreContainer">
+          <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Game" EntityType="Self.Game" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GameResult" EntityType="Self.GameResult" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pool" EntityType="Self.Pool" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PoolUsers" EntityType="Self.PoolUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Prediction" EntityType="Self.Prediction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Team" EntityType="Self.Team" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tournament" EntityType="Self.Tournament" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserStat" EntityType="Self.UserStat" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Game_Team" Association="Self.FK_Game_Team">
+            <End Role="Team" EntitySet="Team" />
+            <End Role="Game" EntitySet="Game" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Game_Team1" Association="Self.FK_Game_Team1">
+            <End Role="Team" EntitySet="Team" />
+            <End Role="Game" EntitySet="Game" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Game_Tournament" Association="Self.FK_Game_Tournament">
+            <End Role="Tournament" EntitySet="Tournament" />
+            <End Role="Game" EntitySet="Game" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GameResult_Game" Association="Self.FK_GameResult_Game">
+            <End Role="Game" EntitySet="Game" />
+            <End Role="GameResult" EntitySet="GameResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GameResult_Team" Association="Self.FK_GameResult_Team">
+            <End Role="Team" EntitySet="Team" />
+            <End Role="GameResult" EntitySet="GameResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pool_Tournament" Association="Self.FK_Pool_Tournament">
+            <End Role="Tournament" EntitySet="Tournament" />
+            <End Role="Pool" EntitySet="Pool" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pool_Users" Association="Self.FK_Pool_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Pool" EntitySet="Pool" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PoolUsers_Pool" Association="Self.FK_PoolUsers_Pool">
+            <End Role="Pool" EntitySet="Pool" />
+            <End Role="PoolUsers" EntitySet="PoolUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PoolUsers_Users" Association="Self.FK_PoolUsers_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="PoolUsers" EntitySet="PoolUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Prediction_Game" Association="Self.FK_Prediction_Game">
+            <End Role="Game" EntitySet="Game" />
+            <End Role="Prediction" EntitySet="Prediction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Prediction_Team" Association="Self.FK_Prediction_Team">
+            <End Role="Team" EntitySet="Team" />
+            <End Role="Prediction" EntitySet="Prediction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Prediction_Users" Association="Self.FK_Prediction_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Prediction" EntitySet="Prediction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Country" Association="Self.FK_Users_Country">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserStat_Tournament" Association="Self.FK_UserStat_Tournament">
+            <End Role="Tournament" EntitySet="Tournament" />
+            <End Role="UserStat" EntitySet="UserStat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserStat_Users" Association="Self.FK_UserStat_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserStat" EntitySet="UserStat" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Dota2NubeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="CountryId" />
+          </Key>
+          <Property Name="CountryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Users_Country" FromRole="Country" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Game">
+          <Key>
+            <PropertyRef Name="GameId" />
+          </Key>
+          <Property Name="GameId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Team1Id" Type="Int32" Nullable="false" />
+          <Property Name="Team2Id" Type="Int32" Nullable="false" />
+          <Property Name="TournamentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Team" Relationship="Self.FK_Game_Team" FromRole="Game" ToRole="Team" />
+          <NavigationProperty Name="Team1" Relationship="Self.FK_Game_Team1" FromRole="Game" ToRole="Team" />
+          <NavigationProperty Name="Tournament" Relationship="Self.FK_Game_Tournament" FromRole="Game" ToRole="Tournament" />
+          <NavigationProperty Name="GameResult" Relationship="Self.FK_GameResult_Game" FromRole="Game" ToRole="GameResult" />
+          <NavigationProperty Name="Prediction" Relationship="Self.FK_Prediction_Game" FromRole="Game" ToRole="Prediction" />
+        </EntityType>
+        <EntityType Name="GameResult">
+          <Key>
+            <PropertyRef Name="GameResultId" />
+          </Key>
+          <Property Name="GameResultId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GameId" Type="Int32" Nullable="false" />
+          <Property Name="WinningTeamId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Game" Relationship="Self.FK_GameResult_Game" FromRole="GameResult" ToRole="Game" />
+          <NavigationProperty Name="Team" Relationship="Self.FK_GameResult_Team" FromRole="GameResult" ToRole="Team" />
+        </EntityType>
+        <EntityType Name="Pool">
+          <Key>
+            <PropertyRef Name="PoolId" />
+          </Key>
+          <Property Name="PoolId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PoolName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TournamentId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Tournament" Relationship="Self.FK_Pool_Tournament" FromRole="Pool" ToRole="Tournament" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Pool_Users" FromRole="Pool" ToRole="Users" />
+          <NavigationProperty Name="PoolUsers" Relationship="Self.FK_PoolUsers_Pool" FromRole="Pool" ToRole="PoolUsers" />
+        </EntityType>
+        <EntityType Name="PoolUsers">
+          <Key>
+            <PropertyRef Name="PoolUsersId" />
+          </Key>
+          <Property Name="PoolUsersId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PoolId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Pool" Relationship="Self.FK_PoolUsers_Pool" FromRole="PoolUsers" ToRole="Pool" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_PoolUsers_Users" FromRole="PoolUsers" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Prediction">
+          <Key>
+            <PropertyRef Name="PredictionId" />
+          </Key>
+          <Property Name="PredictionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="GameId" Type="Int32" Nullable="false" />
+          <Property Name="TeamId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Game" Relationship="Self.FK_Prediction_Game" FromRole="Prediction" ToRole="Game" />
+          <NavigationProperty Name="Team" Relationship="Self.FK_Prediction_Team" FromRole="Prediction" ToRole="Team" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Prediction_Users" FromRole="Prediction" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Team">
+          <Key>
+            <PropertyRef Name="TeamId" />
+          </Key>
+          <Property Name="TeamId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TeamName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TeamShortName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Game" Relationship="Self.FK_Game_Team" FromRole="Team" ToRole="Game" />
+          <NavigationProperty Name="Game1" Relationship="Self.FK_Game_Team1" FromRole="Team" ToRole="Game" />
+          <NavigationProperty Name="GameResult" Relationship="Self.FK_GameResult_Team" FromRole="Team" ToRole="GameResult" />
+          <NavigationProperty Name="Prediction" Relationship="Self.FK_Prediction_Team" FromRole="Team" ToRole="Prediction" />
+        </EntityType>
+        <EntityType Name="Tournament">
+          <Key>
+            <PropertyRef Name="TournamentId" />
+          </Key>
+          <Property Name="TournamentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TournamentName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TournamentStartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Game" Relationship="Self.FK_Game_Tournament" FromRole="Tournament" ToRole="Game" />
+          <NavigationProperty Name="Pool" Relationship="Self.FK_Pool_Tournament" FromRole="Tournament" ToRole="Pool" />
+          <NavigationProperty Name="UserStat" Relationship="Self.FK_UserStat_Tournament" FromRole="Tournament" ToRole="UserStat" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserEmail" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SteamId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Age" Type="Int32" Nullable="false" />
+          <Property Name="CountryId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Country" Relationship="Self.FK_Users_Country" FromRole="Users" ToRole="Country" />
+          <NavigationProperty Name="Pool" Relationship="Self.FK_Pool_Users" FromRole="Users" ToRole="Pool" />
+          <NavigationProperty Name="PoolUsers" Relationship="Self.FK_PoolUsers_Users" FromRole="Users" ToRole="PoolUsers" />
+          <NavigationProperty Name="Prediction" Relationship="Self.FK_Prediction_Users" FromRole="Users" ToRole="Prediction" />
+          <NavigationProperty Name="UserStat" Relationship="Self.FK_UserStat_Users" FromRole="Users" ToRole="UserStat" />
+        </EntityType>
+        <EntityType Name="UserStat">
+          <Key>
+            <PropertyRef Name="UserStatId" />
+          </Key>
+          <Property Name="UserStatId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Score" Type="Int32" Nullable="false" />
+          <Property Name="TournamentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Tournament" Relationship="Self.FK_UserStat_Tournament" FromRole="UserStat" ToRole="Tournament" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_UserStat_Users" FromRole="UserStat" ToRole="Users" />
+        </EntityType>
+        <Association Name="FK_Users_Country">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="CountryId" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="CountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Game_Team">
+          <End Role="Team" Type="Self.Team" Multiplicity="1" />
+          <End Role="Game" Type="Self.Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="Game">
+              <PropertyRef Name="Team1Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Game_Team1">
+          <End Role="Team" Type="Self.Team" Multiplicity="1" />
+          <End Role="Game" Type="Self.Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="Game">
+              <PropertyRef Name="Team2Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Game_Tournament">
+          <End Role="Tournament" Type="Self.Tournament" Multiplicity="1" />
+          <End Role="Game" Type="Self.Game" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tournament">
+              <PropertyRef Name="TournamentId" />
+            </Principal>
+            <Dependent Role="Game">
+              <PropertyRef Name="TournamentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GameResult_Game">
+          <End Role="Game" Type="Self.Game" Multiplicity="1" />
+          <End Role="GameResult" Type="Self.GameResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="GameId" />
+            </Principal>
+            <Dependent Role="GameResult">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Prediction_Game">
+          <End Role="Game" Type="Self.Game" Multiplicity="1" />
+          <End Role="Prediction" Type="Self.Prediction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="GameId" />
+            </Principal>
+            <Dependent Role="Prediction">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GameResult_Team">
+          <End Role="Team" Type="Self.Team" Multiplicity="1" />
+          <End Role="GameResult" Type="Self.GameResult" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="GameResult">
+              <PropertyRef Name="WinningTeamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pool_Tournament">
+          <End Role="Tournament" Type="Self.Tournament" Multiplicity="1" />
+          <End Role="Pool" Type="Self.Pool" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tournament">
+              <PropertyRef Name="TournamentId" />
+            </Principal>
+            <Dependent Role="Pool">
+              <PropertyRef Name="TournamentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pool_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Pool" Type="Self.Pool" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Pool">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PoolUsers_Pool">
+          <End Role="Pool" Type="Self.Pool" Multiplicity="1" />
+          <End Role="PoolUsers" Type="Self.PoolUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pool">
+              <PropertyRef Name="PoolId" />
+            </Principal>
+            <Dependent Role="PoolUsers">
+              <PropertyRef Name="PoolId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PoolUsers_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="PoolUsers" Type="Self.PoolUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="PoolUsers">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Prediction_Team">
+          <End Role="Team" Type="Self.Team" Multiplicity="1" />
+          <End Role="Prediction" Type="Self.Prediction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="Prediction">
+              <PropertyRef Name="TeamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Prediction_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Prediction" Type="Self.Prediction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Prediction">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserStat_Tournament">
+          <End Role="Tournament" Type="Self.Tournament" Multiplicity="1" />
+          <End Role="UserStat" Type="Self.UserStat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tournament">
+              <PropertyRef Name="TournamentId" />
+            </Principal>
+            <Dependent Role="UserStat">
+              <PropertyRef Name="TournamentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserStat_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UserStat" Type="Self.UserStat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserStat">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Dota2NubeConn1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Country" EntityType="Self.Country" />
+          <EntitySet Name="Game" EntityType="Self.Game" />
+          <EntitySet Name="GameResult" EntityType="Self.GameResult" />
+          <EntitySet Name="Pool" EntityType="Self.Pool" />
+          <EntitySet Name="PoolUsers" EntityType="Self.PoolUsers" />
+          <EntitySet Name="Prediction" EntityType="Self.Prediction" />
+          <EntitySet Name="Team" EntityType="Self.Team" />
+          <EntitySet Name="Tournament" EntityType="Self.Tournament" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <EntitySet Name="UserStat" EntityType="Self.UserStat" />
+          <AssociationSet Name="FK_Users_Country" Association="Self.FK_Users_Country">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Game_Team" Association="Self.FK_Game_Team">
+            <End Role="Team" EntitySet="Team" />
+            <End Role="Game" EntitySet="Game" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Game_Team1" Association="Self.FK_Game_Team1">
+            <End Role="Team" EntitySet="Team" />
+            <End Role="Game" EntitySet="Game" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Game_Tournament" Association="Self.FK_Game_Tournament">
+            <End Role="Tournament" EntitySet="Tournament" />
+            <End Role="Game" EntitySet="Game" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GameResult_Game" Association="Self.FK_GameResult_Game">
+            <End Role="Game" EntitySet="Game" />
+            <End Role="GameResult" EntitySet="GameResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Prediction_Game" Association="Self.FK_Prediction_Game">
+            <End Role="Game" EntitySet="Game" />
+            <End Role="Prediction" EntitySet="Prediction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GameResult_Team" Association="Self.FK_GameResult_Team">
+            <End Role="Team" EntitySet="Team" />
+            <End Role="GameResult" EntitySet="GameResult" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pool_Tournament" Association="Self.FK_Pool_Tournament">
+            <End Role="Tournament" EntitySet="Tournament" />
+            <End Role="Pool" EntitySet="Pool" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pool_Users" Association="Self.FK_Pool_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Pool" EntitySet="Pool" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PoolUsers_Pool" Association="Self.FK_PoolUsers_Pool">
+            <End Role="Pool" EntitySet="Pool" />
+            <End Role="PoolUsers" EntitySet="PoolUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PoolUsers_Users" Association="Self.FK_PoolUsers_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="PoolUsers" EntitySet="PoolUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Prediction_Team" Association="Self.FK_Prediction_Team">
+            <End Role="Team" EntitySet="Team" />
+            <End Role="Prediction" EntitySet="Prediction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Prediction_Users" Association="Self.FK_Prediction_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Prediction" EntitySet="Prediction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserStat_Tournament" Association="Self.FK_UserStat_Tournament">
+            <End Role="Tournament" EntitySet="Tournament" />
+            <End Role="UserStat" EntitySet="UserStat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserStat_Users" Association="Self.FK_UserStat_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserStat" EntitySet="UserStat" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Dota2NubeModelStoreContainer" CdmEntityContainer="Dota2NubeConn1">
+          <EntitySetMapping Name="Country">
+            <EntityTypeMapping TypeName="Dota2NubeModel.Country">
+              <MappingFragment StoreEntitySet="Country">
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Game">
+            <EntityTypeMapping TypeName="Dota2NubeModel.Game">
+              <MappingFragment StoreEntitySet="Game">
+                <ScalarProperty Name="GameId" ColumnName="GameId" />
+                <ScalarProperty Name="Team1Id" ColumnName="Team1Id" />
+                <ScalarProperty Name="Team2Id" ColumnName="Team2Id" />
+                <ScalarProperty Name="TournamentId" ColumnName="TournamentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GameResult">
+            <EntityTypeMapping TypeName="Dota2NubeModel.GameResult">
+              <MappingFragment StoreEntitySet="GameResult">
+                <ScalarProperty Name="GameResultId" ColumnName="GameResultId" />
+                <ScalarProperty Name="GameId" ColumnName="GameId" />
+                <ScalarProperty Name="WinningTeamId" ColumnName="WinningTeamId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pool">
+            <EntityTypeMapping TypeName="Dota2NubeModel.Pool">
+              <MappingFragment StoreEntitySet="Pool">
+                <ScalarProperty Name="PoolId" ColumnName="PoolId" />
+                <ScalarProperty Name="PoolName" ColumnName="PoolName" />
+                <ScalarProperty Name="TournamentId" ColumnName="TournamentId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PoolUsers">
+            <EntityTypeMapping TypeName="Dota2NubeModel.PoolUsers">
+              <MappingFragment StoreEntitySet="PoolUsers">
+                <ScalarProperty Name="PoolUsersId" ColumnName="PoolUsersId" />
+                <ScalarProperty Name="PoolId" ColumnName="PoolId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Prediction">
+            <EntityTypeMapping TypeName="Dota2NubeModel.Prediction">
+              <MappingFragment StoreEntitySet="Prediction">
+                <ScalarProperty Name="PredictionId" ColumnName="PredictionId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="GameId" ColumnName="GameId" />
+                <ScalarProperty Name="TeamId" ColumnName="TeamId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Team">
+            <EntityTypeMapping TypeName="Dota2NubeModel.Team">
+              <MappingFragment StoreEntitySet="Team">
+                <ScalarProperty Name="TeamId" ColumnName="TeamId" />
+                <ScalarProperty Name="TeamName" ColumnName="TeamName" />
+                <ScalarProperty Name="TeamShortName" ColumnName="TeamShortName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tournament">
+            <EntityTypeMapping TypeName="Dota2NubeModel.Tournament">
+              <MappingFragment StoreEntitySet="Tournament">
+                <ScalarProperty Name="TournamentId" ColumnName="TournamentId" />
+                <ScalarProperty Name="TournamentName" ColumnName="TournamentName" />
+                <ScalarProperty Name="TournamentStartDate" ColumnName="TournamentStartDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="Dota2NubeModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+                <ScalarProperty Name="SteamId" ColumnName="SteamId" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserStat">
+            <EntityTypeMapping TypeName="Dota2NubeModel.UserStat">
+              <MappingFragment StoreEntitySet="UserStat">
+                <ScalarProperty Name="UserStatId" ColumnName="UserStatId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="TournamentId" ColumnName="TournamentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

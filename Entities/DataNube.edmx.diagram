@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8ab8b8089bab4989b41fd214b7026ee4" Name="Diagram1">
+        <EntityTypeShape EntityType="Dota2Nube.Entities.Country" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Nube.Entities.Game" Width="1.5" PointX="6" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Nube.Entities.GameResult" Width="1.5" PointX="8.25" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Nube.Entities.Pool" Width="1.5" PointX="5.25" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Nube.Entities.PoolUser" Width="1.5" PointX="7.5" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Nube.Entities.Prediction" Width="1.5" PointX="8.25" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Nube.Entities.Team" Width="1.5" PointX="3.75" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Nube.Entities.Tournament" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Nube.Entities.User" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Nube.Entities.UserStat" Width="1.5" PointX="5.25" PointY="1.75" IsExpanded="true" />
+        <AssociationConnector Association="Dota2Nube.Entities.FK_Users_Country" ManuallyRouted="false" />
+        <AssociationConnector Association="Dota2Nube.Entities.FK_Game_Team" ManuallyRouted="false" />
+        <AssociationConnector Association="Dota2Nube.Entities.FK_Game_Team1" ManuallyRouted="false" />
+        <AssociationConnector Association="Dota2Nube.Entities.FK_Game_Tournament" ManuallyRouted="false" />
+        <AssociationConnector Association="Dota2Nube.Entities.FK_GameResult_Game" ManuallyRouted="false" />
+        <AssociationConnector Association="Dota2Nube.Entities.FK_Prediction_Game" ManuallyRouted="false" />
+        <AssociationConnector Association="Dota2Nube.Entities.FK_GameResult_Team" ManuallyRouted="false" />
+        <AssociationConnector Association="Dota2Nube.Entities.FK_Pool_Tournament" ManuallyRouted="false" />
+        <AssociationConnector Association="Dota2Nube.Entities.FK_Pool_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="Dota2Nube.Entities.FK_PoolUsers_Pool" ManuallyRouted="false" />
+        <AssociationConnector Association="Dota2Nube.Entities.FK_PoolUsers_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="Dota2Nube.Entities.FK_Prediction_Team" ManuallyRouted="false" />
+        <AssociationConnector Association="Dota2Nube.Entities.FK_Prediction_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="Dota2Nube.Entities.FK_UserStat_Tournament" ManuallyRouted="false" />
+        <AssociationConnector Association="Dota2Nube.Entities.FK_UserStat_Users" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
