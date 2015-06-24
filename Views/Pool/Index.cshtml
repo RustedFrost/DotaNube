@@ -1,0 +1,37 @@
+﻿@{
+    Layout = "~/Views/Shared/_Default.cshtml";
+}
+
+
+<div>
+    Pools: <select id="ddlPools" data-bind="options: Pools, optionsText: 'PoolName', optionsValue:'PoolId',event:{ change: $root.selectionChanged}"></select>
+    
+</div>
+
+@section PageScripts
+{
+    <script type="text/javascript">
+        /// <reference path="~/Scripts/knockout-3.3.0.js" />
+        /// <reference path="~/Scripts/jquery-1.9.0.min.js" />
+        /// <reference path="~/Scripts/knockout.mapping-latest.js" />
+        
+
+        var vmData =
+            {
+                Pools: ko.observableArray(),
+                selectionChanged: function (data, event) {
+                    alert("Changed");
+                }
+                
+            };
+
+        $(document).ready(function () {
+            $.getJSON("/Pool/GetPools", function (result) {
+                vmData.Pools(ko.toJS(result));
+                
+                
+            });
+            ko.applyBindings(vmData);
+        });
+    </script>
+}
